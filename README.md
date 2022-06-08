@@ -4,16 +4,16 @@ The Game of Life, also known simply as Life, is a cellular automaton devised by 
 # Conway's Rules
 Conway's universe consists of 4 rules -
 
-1. A live cell with 1 or 0 neighbours die, as if by isolation or loneliness.<br>
+1. A live cell with 1 or 0 neighbours dies, as if by isolation or loneliness.<br>
 ![Isolated](https://user-images.githubusercontent.com/38834548/172580671-99c514e6-0fa6-49ac-8e14-1bcc2a8d79f1.png)
 
-2. A live cell with 4 or more neighbours die, as if by overpopulation.<br>
+2. A live cell with 4 or more neighbours dies, as if by overpopulation.<br>
 ![Overpopulation](https://user-images.githubusercontent.com/38834548/172580911-b01d61dd-772c-4c7a-9c6a-db3e26f6e72f.png)
 
-3. A live cell with 2 or 3 neighbours survive, as if by forming a family.<br>
+3. A live cell with 2 or 3 neighbours survives, as if by forming a family.<br>
 ![Survive](https://user-images.githubusercontent.com/38834548/172580974-f00688b7-c40f-4755-b29b-591e96bbaf90.png)
 
-4. A dead cell will become alive if it has 3 neighbours, as if by reproduction.<br>
+4. A dead cell with 3 neighbours becomes alive, as if by reproduction.<br>
 ![Revive](https://user-images.githubusercontent.com/38834548/172581316-ba0e5ce9-adf0-435d-b818-6370fde4b7a6.png)
 
 # Simulation
