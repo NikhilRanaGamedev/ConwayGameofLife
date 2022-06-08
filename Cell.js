@@ -5,35 +5,39 @@ class Cell
         this.x = x;
         this.y = y;
         this.state = state;
-        this.changeTo = state;
+        this.stateToChangeTo = state;
     }
 
+    // Check state of cell and change it if needed.
     CheckState(list)
     {
+        // Check all 8 neighbours for this cell.
         let neighbours = this.CheckNeighbours(list);
 
         if (this.state == State.ALIVE)
         {
-            if (neighbours <= 1 || neighbours >= 4)
+            if (neighbours <= 1 || neighbours >= 4) // Suppose the cell dies by isolation or by overpopulation.
             {
-                this.changeTo = State.DEAD;
+                this.stateToChangeTo = State.DEAD;
             }
-            else
+            else // Suppose the cell survives.
             {
-                this.changeTo = State.ALIVE;
+                this.stateToChangeTo = State.ALIVE;
             }
         }
-        else if (neighbours == 3)
+        else if (neighbours == 3) // Suppose the cell is born by reproduction.
         {
-            this.changeTo = State.ALIVE;
+            this.stateToChangeTo = State.ALIVE;
         }
     }
 
+    // Update the state of the cell.
     UpdateState()
     {
-        this.state = this.changeTo;
+        this.state = this.stateToChangeTo;
     }
 
+    // Check the state of the 8 neighbours of this cell.
     CheckNeighbours(list)
     {
         let neighbours = 0;

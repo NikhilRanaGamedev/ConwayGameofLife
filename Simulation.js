@@ -1,45 +1,50 @@
+// State for the cells.
 const State = {
 	DEAD: 0,
 	ALIVE: 1
 }
 
 let Cells = [];
-let Offset = 0;
 let CellSize = 5;
-let XSize = 360;
-let YSize = 165;
+let XSize = 360; // Number of cells in X.
+let YSize = 165; // Number of cells in Y.
 
-let time = 0;
-let simulate = false;
+let time = 0; // Time between generations.
+let simulate = false; // Simulation started.
 
+// Sets up the simulation.
 function setup()
 {
-	// createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
-	createCanvas(5000, 5000);
-	background(180);
+	createCanvas(5000, 5000); // Create big enough canvas to fit all cells in future.
+	background(180); // Color background.
 
-	Init(XSize, YSize, false);
-	DrawInputBoxes();
+	Init(XSize, YSize, false); // Initialize cells.
+	DrawInputBoxes(); // Draw the Input boxes to take the inputs.
 }
 
+// Draws every frame.
 function draw()
 {
+	// Calculate time.
 	time += deltaTime / 1000;
 
+	// Time until next generation.
 	if (time >= 0)
 	{
-		time = 0;
-		background(180);
+		time = 0; // Reset time.
+		background(180); // Recolor background.
 		
-		DrawCells(XSize, YSize, Offset, CellSize);
+		DrawCells(XSize, YSize, CellSize); // Draw Cells.
 	}
 
+	// Show the input boxes while simulation has not started.
 	if (!simulate)
 	{
 		DrawInputsText();
 	}
 }
 
+// Initialize cells.
 function Init(_xSize, _ySize, randomize)
 {
 	for (let y = 0; y < _ySize; y++)
@@ -48,6 +53,7 @@ function Init(_xSize, _ySize, randomize)
 
 		for (let x = 0; x < _xSize; x++)
 		{
+			// Either make the state random for each cell or keep it dead.
 			if (!randomize)
 				Cells[y][x] = new Cell(x, y, State.DEAD);
 			else
@@ -67,19 +73,22 @@ function DrawInputsText()
 // Draws the input boxes.
 function DrawInputBoxes()
 {
+	// Take X Size.
     let inputXSize = createInput(360, int);
     inputXSize.size(100, 25);
     inputXSize.position(35, 8);
 
+	// Take Y Size.
     let inputYSize = createInput(165, int);
     inputYSize.size(100, 25);
     inputYSize.position(200, 8);
 
+	// Take Cell Size.
     let inputCellSize = createInput(5, int);
     inputCellSize.size(100, 25);
     inputCellSize.position(415, 8);
 	
-	// Generate the maze on button click.
+	// For resizing canvas.
     let resizeButton = createButton('Resize');
     resizeButton.size(100, 32);
     resizeButton.position(550, 8);
@@ -93,7 +102,7 @@ function DrawInputBoxes()
 		background(180);
     });
 
-    // Generate the maze on button click.
+	// Simulate using the cells drawn.
     let simulateButton = createButton('Simulate!');
     simulateButton.size(100, 32);
     simulateButton.position(675, 8);
@@ -115,7 +124,7 @@ function DrawInputBoxes()
 		// createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
     });
 	
-	// Generate the maze on button click.
+	// Simulate using random cells.
     let randomSimulateButton = createButton('Random Simulate!');
     randomSimulateButton.size(100, 32);
     randomSimulateButton.position(800, 8);
@@ -139,8 +148,10 @@ function DrawInputBoxes()
     });
 }
 
-function DrawCells(_xSize, _ySize, _offset, _cellSize)
+// Draw the cells.
+function DrawCells(_xSize, _ySize, _cellSize)
 {
+	// First loop - Check each cell state. Don't update the states yet.
 	for (let y = 0; y < _ySize; y++)
 	{
 		for (let x = 0; x < _xSize; x++)
@@ -152,6 +163,7 @@ function DrawCells(_xSize, _ySize, _offset, _cellSize)
 		}
 	}
 
+	// Second loop - Update the cell states.
 	for (let y = 0; y < _ySize; y++)
 	{
 		for (let x = 0; x < _xSize; x++)
@@ -163,9 +175,11 @@ function DrawCells(_xSize, _ySize, _offset, _cellSize)
 
 			if (Cells[y][x].state == State.ALIVE)
 			{
+				// Draw a white square if cell is alive.
 				fill('white');
-				square(x * _cellSize + _offset, y * _cellSize + _offset, _cellSize);
+				square(x * _cellSize, y * _cellSize, _cellSize);
 			
+				// Expand in X or Y when any cell reaches the edge for the first time. This makes the grid unlimited in X and Y.
 				if (y == YSize - 1)
 				{
 					ExpandVertically();
@@ -180,13 +194,11 @@ function DrawCells(_xSize, _ySize, _offset, _cellSize)
 	}
 }
 
+// Called when mouse is pressed. Calculates the cell that was clicked and toggles it ON or OFF.
 function mousePressed()
 {
 	if (!simulate)
 	{
-		// let x = Math.ceil((mouseX - Offset * 2) / CellSize);
-		// let y = Math.ceil((mouseY - Offset * 2) / CellSize);
-		
 		let x = Math.floor(mouseX / CellSize);
 		let y = Math.floor(mouseY / CellSize);
 	
@@ -204,6 +216,7 @@ function mousePressed()
 	}
 }
 
+// Expand the grid vertically.
 function ExpandVertically()
 {
 	Cells[YSize] = [];
@@ -217,6 +230,7 @@ function ExpandVertically()
 	// createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
 }
 
+// Expand the grid horizontally.
 function ExpandHorizontally()
 {
 	for (let y = 0; y < YSize; y++)
