@@ -6,8 +6,8 @@ const State = {
 let Cells = [];
 let Offset = 0;
 let CellSize = 5;
-let XSize = 365;
-let YSize = 170;
+let XSize = 360;
+let YSize = 165;
 
 let time = 0;
 let simulate = false;
