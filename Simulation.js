@@ -14,7 +14,8 @@ let simulate = false;
 
 function setup()
 {
-	createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
+	// createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
+	createCanvas(5000, 5000);
 	background(180);
 
 	Init(XSize, YSize, false);
@@ -111,7 +112,7 @@ function DrawInputBoxes()
 		randomSimulateButton.remove();
 
 		simulate = true;
-		createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
+		// createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
     });
 	
 	// Generate the maze on button click.
@@ -133,7 +134,7 @@ function DrawInputBoxes()
 		randomSimulateButton.remove();
 
 		simulate = true;
-		createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
+		// createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
 		Init(XSize, YSize, true);
     });
 }
@@ -164,6 +165,16 @@ function DrawCells(_xSize, _ySize, _offset, _cellSize)
 			{
 				fill('white');
 				square(x * _cellSize + _offset, y * _cellSize + _offset, _cellSize);
+			
+				if (y == YSize - 1)
+				{
+					ExpandVertically();
+				}
+
+				if (x == XSize - 1)
+				{
+					ExpandHorizontally();
+				}
 			}
 		}
 	}
@@ -191,4 +202,28 @@ function mousePressed()
 			}
 		}
 	}
+}
+
+function ExpandVertically()
+{
+	Cells[YSize] = [];
+
+	for (let x = 0; x < XSize; x++)
+	{
+		Cells[YSize][x] = new Cell(x, YSize, State.DEAD);
+	}
+
+	YSize++;
+	// createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
+}
+
+function ExpandHorizontally()
+{
+	for (let y = 0; y < YSize; y++)
+	{
+		Cells[y][XSize] = new Cell(XSize, y, State.DEAD);
+	}
+
+	XSize++;
+	// createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
 }
