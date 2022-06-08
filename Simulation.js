@@ -9,8 +9,9 @@ let CellSize = 5;
 let XSize = 360; // Number of cells in X.
 let YSize = 165; // Number of cells in Y.
 
-let time = 0; // Time between generations.
-let simulate = false; // Simulation started.
+let Time = 0;
+let TimeToWait = 0; // Time to wait between generations.
+let Simulate = false; // Simulation started.
 
 // Sets up the simulation.
 function setup()
@@ -26,19 +27,19 @@ function setup()
 function draw()
 {
 	// Calculate time.
-	time += deltaTime / 1000;
+	Time += deltaTime / 1000;
 
 	// Time until next generation.
-	if (time >= 0)
+	if (Time >= TimeToWait)
 	{
-		time = 0; // Reset time.
+		Time = 0; // Reset time.
 		background(180); // Recolor background.
 		
 		DrawCells(XSize, YSize, CellSize); // Draw Cells.
 	}
 
 	// Show the input boxes while simulation has not started.
-	if (!simulate)
+	if (!Simulate)
 	{
 		DrawInputsText();
 	}
@@ -66,8 +67,9 @@ function Init(_xSize, _ySize, randomize)
 function DrawInputsText()
 {
     text('X:', 10, 20);
-    text('Y:', 175, 20);
-    text('Cell Size:', 350, 20);
+    text('Y:', 150, 20);
+    text('Cell Size:', 300, 20);
+    text('Time Interval (sec):', 475, 20);
 }
 
 // Draws the input boxes.
@@ -81,71 +83,69 @@ function DrawInputBoxes()
 	// Take Y Size.
     let inputYSize = createInput(165, int);
     inputYSize.size(100, 25);
-    inputYSize.position(200, 8);
+    inputYSize.position(180, 8);
 
 	// Take Cell Size.
     let inputCellSize = createInput(5, int);
     inputCellSize.size(100, 25);
-    inputCellSize.position(415, 8);
+    inputCellSize.position(360, 8);
+
+	// Take Time Interval.
+    let inputTime = createInput(0, int);
+    inputTime.size(100, 25);
+    inputTime.position(590, 8);
 	
 	// For resizing canvas.
     let resizeButton = createButton('Resize');
     resizeButton.size(100, 32);
-    resizeButton.position(550, 8);
+    resizeButton.position(725, 8);
     resizeButton.mousePressed(function()
     {
-        XSize = Number(inputXSize.value());
-        YSize = Number(inputYSize.value());
-        CellSize = Number(inputCellSize.value());
-        
-		createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
-		background(180);
+		UpdateInputs();
     });
 
 	// Simulate using the cells drawn.
     let simulateButton = createButton('Simulate!');
     simulateButton.size(100, 32);
-    simulateButton.position(675, 8);
+    simulateButton.position(850, 8);
     simulateButton.mousePressed(function()
     {
-        XSize = Number(inputXSize.value());
-        YSize = Number(inputYSize.value());
-        CellSize = Number(inputCellSize.value());
-        
-        // clear();
-		inputXSize.remove();
-		inputYSize.remove();
-		inputCellSize.remove();
-		resizeButton.remove();
-		simulateButton.remove();
-		randomSimulateButton.remove();
-
-		simulate = true;
-		// createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
+		UpdateInputs();
+        RemoveInputs();
+		Simulate = true;
     });
 	
 	// Simulate using random cells.
     let randomSimulateButton = createButton('Random Simulate!');
     randomSimulateButton.size(100, 32);
-    randomSimulateButton.position(800, 8);
+    randomSimulateButton.position(975, 8);
     randomSimulateButton.mousePressed(function()
     {
-        XSize = Number(inputXSize.value());
+		Simulate = true;
+
+		UpdateInputs();
+        RemoveInputs();
+		Init(XSize, YSize, true);
+    });
+
+	function UpdateInputs()
+	{
+		XSize = Number(inputXSize.value());
         YSize = Number(inputYSize.value());
         CellSize = Number(inputCellSize.value());
-        
-        // clear();
+		TimeToWait = Number(inputTime.value());
+	}
+
+	function RemoveInputs()
+	{
 		inputXSize.remove();
 		inputYSize.remove();
 		inputCellSize.remove();
+		inputTime.remove();
 		resizeButton.remove();
 		simulateButton.remove();
 		randomSimulateButton.remove();
-
-		simulate = true;
-		// createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
-		Init(XSize, YSize, true);
-    });
+	}
 }
 
 // Draw the cells.
@@ -156,7 +156,7 @@ function DrawCells(_xSize, _ySize, _cellSize)
 	{
 		for (let x = 0; x < _xSize; x++)
 		{
-			if (simulate)
+			if (Simulate)
 			{
 				Cells[y][x].CheckState(Cells);
 			}
@@ -168,7 +168,7 @@ function DrawCells(_xSize, _ySize, _cellSize)
 	{
 		for (let x = 0; x < _xSize; x++)
 		{
-			if (simulate)
+			if (Simulate)
 			{
 				Cells[y][x].UpdateState();
 			}
@@ -197,7 +197,7 @@ function DrawCells(_xSize, _ySize, _cellSize)
 // Called when mouse is pressed. Calculates the cell that was clicked and toggles it ON or OFF.
 function mousePressed()
 {
-	if (!simulate)
+	if (!Simulate)
 	{
 		let x = Math.floor(mouseX / CellSize);
 		let y = Math.floor(mouseY / CellSize);
