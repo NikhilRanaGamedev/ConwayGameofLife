@@ -37,7 +37,7 @@ class Cell
         this.state = this.stateToChangeTo;
     }
     
-    // Check the state of the 8 neighbours of this cell.
+    // Check the state of the 8 neighbours of this cell. The starting and ending edges are connected.
     CheckNeighbours(list)
     {
         let neighbours = 0;
