@@ -36,44 +36,27 @@ class Cell
     {
         this.state = this.stateToChangeTo;
     }
-
+    
     // Check the state of the 8 neighbours of this cell.
     CheckNeighbours(list)
     {
         let neighbours = 0;
-        
-        if (this.y - 1 >= 0 && this.y - 1 < list.length)
-        {
-            if (this.x - 1 >= 0 && this.x - 1 < list[0].length)
-                list[this.y - 1][this.x - 1].state == State.ALIVE ? neighbours++ : neighbours; // Top Left
 
-            if (this.x >= 0 && this.x < list[0].length)
-                list[this.y - 1][this.x].state == State.ALIVE ? neighbours++ : neighbours; // Top
+        let up = this.y - 1 >= 0 ? this.y - 1 : list.length - 1;
+        let down = this.y + 1 < list.length ? this.y + 1 : 0;
+        let left = this.x - 1 >= 0 ? this.x - 1 : list[0].length - 1;
+        let right = this.x + 1 < list[0].length ? this.x + 1 : 0;
         
-            if (this.x + 1 >= 0 && this.x + 1 < list[0].length)
-                list[this.y - 1][this.x + 1].state == State.ALIVE ? neighbours++ : neighbours; // Top Right
-        }
-            
-        if (this.y >= 0 && this.y < list.length)
-        {
-            if (this.x - 1 >= 0 && this.x - 1 < list[0].length)
-                list[this.y][this.x - 1].state == State.ALIVE ? neighbours++ : neighbours; // Left
-    
-            if (this.x + 1 >= 0 && this.x + 1 < list[0].length)
-                list[this.y][this.x + 1].state == State.ALIVE ? neighbours++ : neighbours; // Right
-        }
+        list[up][left].state == State.ALIVE ? neighbours++ : neighbours; // Top Left
+        list[up][this.x].state == State.ALIVE ? neighbours++ : neighbours; // Top
+        list[up][right].state == State.ALIVE ? neighbours++ : neighbours; // Top Right
 
-        if (this.y + 1 >= 0 && this.y + 1 < list.length)
-        {
-            if (this.x - 1 >= 0 && this.x - 1 < list[0].length)
-                list[this.y + 1][this.x - 1].state == State.ALIVE ? neighbours++ : neighbours; // Bottom Left
-    
-            if (this.x >= 0 && this.x < list[0].length)
-                list[this.y + 1][this.x].state == State.ALIVE ? neighbours++ : neighbours; // Bottom
-    
-            if (this.x + 1 >= 0 && this.x + 1 < list[0].length)
-                list[this.y + 1][this.x + 1].state == State.ALIVE ? neighbours++ : neighbours; // Bottom Right
-        } 
+        list[this.y][left].state == State.ALIVE ? neighbours++ : neighbours; // Left
+        list[this.y][right].state == State.ALIVE ? neighbours++ : neighbours; // Right
+
+        list[down][left].state == State.ALIVE ? neighbours++ : neighbours; // Bottom Left
+        list[down][this.x].state == State.ALIVE ? neighbours++ : neighbours; // Bottom
+        list[down][right].state == State.ALIVE ? neighbours++ : neighbours; // Bottom Right
 
         return neighbours;
     }

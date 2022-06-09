@@ -13,10 +13,12 @@ let Time = 0;
 let TimeToWait = 0; // Time to wait between generations.
 let Simulate = false; // Simulation started.
 
+let Iterations = 0;
+
 // Sets up the simulation.
 function setup()
 {
-	createCanvas(5000, 5000); // Create big enough canvas to fit all cells in future.
+	createCanvas(XSize * CellSize, YSize * CellSize); // Create Canvas.
 	background(180); // Color background.
 
 	Init(XSize, YSize, false); // Initialize cells.
@@ -36,6 +38,13 @@ function draw()
 		background(180); // Recolor background.
 		
 		DrawCells(XSize, YSize, CellSize); // Draw Cells.
+
+		if (Simulate)
+		{
+			fill('black');
+			textSize(16);
+			text('Generations: ' + Iterations, 800, 20);
+		}
 	}
 
 	// Show the input boxes while simulation has not started.
@@ -102,6 +111,7 @@ function DrawInputBoxes()
     resizeButton.mousePressed(function()
     {
 		UpdateInputs();
+		createCanvas(XSize * CellSize, YSize * CellSize); // Resize canvas.
     });
 
 	// Simulate using the cells drawn.
@@ -113,6 +123,7 @@ function DrawInputBoxes()
 		UpdateInputs();
         RemoveInputs();
 		Simulate = true;
+		createCanvas(XSize * CellSize, YSize * CellSize); // Resize canvas.
     });
 	
 	// Simulate using random cells.
@@ -126,6 +137,7 @@ function DrawInputBoxes()
 		UpdateInputs();
         RemoveInputs();
 		Init(XSize, YSize, true);
+		createCanvas(XSize * CellSize, YSize * CellSize); // Resize canvas.
     });
 
 	function UpdateInputs()
@@ -178,20 +190,11 @@ function DrawCells(_xSize, _ySize, _cellSize)
 				// Draw a white square if cell is alive.
 				fill('white');
 				square(x * _cellSize, y * _cellSize, _cellSize);
-			
-				// Expand in X or Y when any cell reaches the edge for the first time. This makes the grid unlimited in X and Y.
-				if (y == YSize - 1)
-				{
-					ExpandVertically();
-				}
-
-				if (x == XSize - 1)
-				{
-					ExpandHorizontally();
-				}
 			}
 		}
 	}
+
+	Iterations++;
 }
 
 // Called when mouse is pressed. Calculates the cell that was clicked and toggles it ON or OFF.
@@ -214,30 +217,4 @@ function mousePressed()
 			}
 		}
 	}
-}
-
-// Expand the grid vertically.
-function ExpandVertically()
-{
-	Cells[YSize] = [];
-
-	for (let x = 0; x < XSize; x++)
-	{
-		Cells[YSize][x] = new Cell(x, YSize, State.DEAD);
-	}
-
-	YSize++;
-	// createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
-}
-
-// Expand the grid horizontally.
-function ExpandHorizontally()
-{
-	for (let y = 0; y < YSize; y++)
-	{
-		Cells[y][XSize] = new Cell(XSize, y, State.DEAD);
-	}
-
-	XSize++;
-	// createCanvas(XSize * CellSize + (Offset * 2), YSize * CellSize + (Offset * 2));
 }
