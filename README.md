@@ -21,8 +21,8 @@ Using the above four rules, a no player game can be started where Conway's unive
 
 # Code
 1. We take a grid and randomly assign each cell as either ALIVE or DEAD.
-2. Loop through the cells and cast the 4 rules upon them.
-3. Update the cells state.
+2. Loop through all the cells and cast the 4 rules upon them. Store the new state.
+3. Update the cells state with the new state.
 4. Rinse and Repeat Step 2 and 3.
 
 NOTE: The rules are casted upon each cell at each generation (each loop). So first check the state a cell should change to. Store it. And once all the cells have been checked, then update them.
