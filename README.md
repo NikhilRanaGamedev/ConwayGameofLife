@@ -26,3 +26,10 @@ Using the above four rules, a no player game can be started where Conway's unive
 4. Rinse and Repeat Step 2 and 3.
 
 NOTE: The rules are casted upon each cell at each generation (each loop). So first check the state a cell should change to. Store it. And once all the cells have been checked, then update them.
+
+# Edge Case
+You can make the simulation on an infinite grid plane or you can clamp it down in 2 ways.
+
+1. At the edges outside your grid, all the cells are dead.<br>
+OR<br>
+2. The starting and ending edges are connected.<br>
